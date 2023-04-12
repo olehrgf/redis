@@ -2,9 +2,7 @@ FROM alpine:3.15 as builder
 
 MAINTAINER Opstree Solutions
 
-LABEL VERSION=1.0 \
-      ARCH=AMD64 \
-      DESCRIPTION="A production grade performance tuned redis docker image created by Opstree Solutions"
+LABEL DESCRIPTION="A production grade performance tuned redis docker image created by Opstree Solutions"
 
 ARG REDIS_DOWNLOAD_URL="http://download.redis.io/"
 
@@ -23,9 +21,7 @@ FROM alpine:3.15
 
 MAINTAINER Opstree Solutions
 
-LABEL VERSION=1.0 \
-      ARCH=AMD64 \
-      DESCRIPTION="A production grade performance tuned redis docker image created by Opstree Solutions"
+LABEL DESCRIPTION="A production grade performance tuned redis docker image created by Opstree Solutions"
 
 COPY --from=builder /usr/local/bin/redis-server /usr/local/bin/redis-server
 COPY --from=builder /usr/local/bin/redis-cli /usr/local/bin/redis-cli
@@ -40,6 +36,10 @@ COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY setupMasterSlave.sh /usr/bin/setupMasterSlave.sh
 
 COPY healthcheck.sh /usr/bin/healthcheck.sh
+
+# Make configuration writable for root for OpenShift compatibility
+RUN chown -R 1000:0 /etc/redis && \
+    chmod -R g+rw /etc/redis
 
 RUN chown -R redis:redis /etc/redis
 
