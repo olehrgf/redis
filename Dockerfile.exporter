@@ -1,7 +1,7 @@
+FROM alpine:3.15 as builder
+
 ARG TARGETOS
 ARG TARGETARCH
-
-FROM alpine:3.15 as builder
 
 ARG EXPORTER_URL="https://github.com/oliver006/redis_exporter/releases/download"
 
